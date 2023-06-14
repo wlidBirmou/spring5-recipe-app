@@ -1,5 +1,7 @@
 package guru.springframework.domain;
 
+import org.hibernate.annotations.Fetch;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -12,7 +14,7 @@ public class Ingredient {
     private String description;
     private BigDecimal amount;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private UnitOfMeasure unitOfMeasure;
 
     @ManyToOne
