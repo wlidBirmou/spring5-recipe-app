@@ -1,7 +1,11 @@
 package guru.springframework.service;
 
 
-import guru.springframework.repositories.RecipeRepository;
+import guru.springframework.domain.Recipe;
 
-public interface RecipeService extends RecipeRepository {
+import java.util.Set;
+
+public interface RecipeService  {
+    Set<Recipe> getRecipes();
+
 }
