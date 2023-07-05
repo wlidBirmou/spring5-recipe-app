@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @EqualsAndHashCode(exclude = {"unitOfMeasure","recipe"})
 public class Ingredient {
 
@@ -22,8 +25,6 @@ public class Ingredient {
     @ManyToOne
     private Recipe recipe;
 
-    public Ingredient() {
-    }
 
     public Ingredient( String description, BigDecimal amount, UnitOfMeasure unitOfMeasure, Recipe recipe) {
         this.description = description;

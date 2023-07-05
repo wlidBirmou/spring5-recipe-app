@@ -9,6 +9,9 @@ import java.util.Set;
 @Data
 @Entity
 @EqualsAndHashCode(exclude = {"notes","categories","ingredients"})
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Recipe {
 
     @Id

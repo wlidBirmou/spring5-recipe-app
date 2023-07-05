@@ -13,13 +13,14 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashSet;
 
 @Component
 @Slf4j
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-    private RecipeRepository recipeRepository;
-    private UnitOfMeasureRepository unitOfMeasureRepository;
+    private final RecipeRepository recipeRepository;
+    private final UnitOfMeasureRepository unitOfMeasureRepository;
 
     @Autowired
     public DataLoader(RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
@@ -29,7 +30,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        Recipe guacamole=new Recipe();
+        Recipe guacamole=Recipe.builder().ingredients(new LinkedHashSet<>()).build();
         guacamole.setDescription("Perfect guacamole");
         guacamole.setPrepTime(10);
         guacamole.setCookTime(0);
@@ -46,7 +47,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
         this.recipeRepository.save(guacamole);
 
-        Recipe grilledChicken=new Recipe();
+        Recipe grilledChicken=Recipe.builder().ingredients(new LinkedHashSet<>()).build();
         grilledChicken.setDirections("First, I marinate the chicken briefly in a spicy paste of ancho chile powder, oregano, cumin, and sweet orange juice while the grill is heating. You can also use this time to prepare the taco toppings.\n" +
                 "\n" +
                 "Grill the chicken, then let it rest while you warm the tortillas. Now you are ready to assemble the tacos and dig in. The whole meal comes together in about 30 minutes!");
