@@ -3,6 +3,7 @@ package guru.springframework.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 
@@ -20,7 +21,7 @@ public class Category {
     private String description;
 
     @ManyToMany(mappedBy = "categories")
-    private Set<Recipe> recipes;
+    private Set<Recipe> recipes=new LinkedHashSet<>();
 
 
 }

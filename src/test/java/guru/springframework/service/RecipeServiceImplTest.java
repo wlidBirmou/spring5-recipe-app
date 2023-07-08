@@ -1,5 +1,8 @@
 package guru.springframework.service;
 
+import guru.springframework.commands.RecipeCommand;
+import guru.springframework.converters.*;
+import guru.springframework.domain.Difficulty;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import org.junit.Before;
@@ -22,11 +25,27 @@ public class RecipeServiceImplTest {
     @Mock
     private RecipeRepository recipeRepository;
 
+    private final Long ID=3l;
+    private final String DESCRIPTION="desc";
+    private final Integer PREP_TIME=30;
+    private final Integer COOK_TIME=40;
+    private final Integer SERVINGS=50;
+    private final String SOURCE="src";
+    private final String URL="http://som.com";
+    private final String DIRECTIONS="directions";
+    private final Byte[] IMAGE={1,1,0,1,1};
+    private final Difficulty DIFFICULTY=Difficulty.MODERATE;
+
+
     @Before
     public void setUp()  {
         MockitoAnnotations.initMocks(this);
-        recipeService=new RecipeServiceImpl(this.recipeRepository);
-
+        RecipeToRecipeCommand recipeToRecipeCommand=new RecipeToRecipeCommand(new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()),
+                new CategoryToCategoryCommand(),new NotesToNotesCommand());
+        RecipeCommandToRecipe recipeCommandToRecipe=new RecipeCommandToRecipe(
+                new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure())
+                ,new CategoryCommandToCategory(),new NotesCommandToNotes());
+        recipeService=new RecipeServiceImpl(this.recipeRepository,recipeCommandToRecipe,recipeToRecipeCommand);
     }
 
     @Test
@@ -50,5 +69,54 @@ public class RecipeServiceImplTest {
         assertNotNull(recipeResult);
         assertEquals(recipe,recipeResult);
         verify(recipeRepository,times(1)).findById(any());
+    }
+
+    @Test
+    public void testSave(){
+        Recipe recipe=Recipe.builder()
+                .id(this.ID)
+                .description(this.DESCRIPTION)
+                .prepTime(this.PREP_TIME)
+                .cookTime(this.COOK_TIME)
+                .servings(this.SERVINGS)
+                .source(this.SOURCE)
+                .url(this.URL)
+                .directions(this.DIRECTIONS)
+                .image(this.IMAGE)
+                .difficulty(this.DIFFICULTY)
+                .build();
+        RecipeCommand recipeCommand=RecipeCommand.builder()
+                .id(this.ID)
+                .description(this.DESCRIPTION)
+                .prepTime(this.PREP_TIME)
+                .cookTime(this.COOK_TIME)
+                .servings(this.SERVINGS)
+                .source(this.SOURCE)
+                .url(this.URL)
+                .directions(this.DIRECTIONS)
+                .image(this.IMAGE)
+                .difficulty(this.DIFFICULTY)
+                .build();
+        when(recipeRepository.save(any())).thenReturn(recipe);
+        RecipeCommand savedRecipeCommand=this.recipeService.save(recipeCommand);
+        assertEquals(recipeCommand.getId(),savedRecipeCommand.getId());
+        assertEquals(recipeCommand.getDescription(),savedRecipeCommand.getDescription());
+        assertEquals(recipeCommand.getUrl(),savedRecipeCommand.getUrl());
+        assertEquals(recipeCommand.getPrepTime(),savedRecipeCommand.getPrepTime());
+        assertEquals(recipeCommand.getCookTime(),savedRecipeCommand.getCookTime());
+        assertEquals(recipeCommand.getDirections(),savedRecipeCommand.getDirections());
+        assertEquals(recipeCommand.getImage(),savedRecipeCommand.getImage());
+        assertEquals(recipeCommand.getDifficulty(),savedRecipeCommand.getDifficulty());
+        assertEquals(recipeCommand.getServings(),savedRecipeCommand.getServings());
+        verify(this.recipeRepository,times(1)).save(any());
+    }
+
+    @Test
+    public void testSaveNull(){
+        RecipeCommand recipeCommand=null;
+        when(recipeRepository.save(null)).thenReturn(null);
+        assertNull(this.recipeService.save(recipeCommand));
+        verify(this.recipeRepository,times(0)).save(any());
+
     }
 }
