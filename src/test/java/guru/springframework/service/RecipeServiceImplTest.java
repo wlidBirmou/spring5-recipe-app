@@ -133,4 +133,10 @@ public class RecipeServiceImplTest {
         verify(this.recipeRepository,times(0)).save(any());
 
     }
+
+    @Test
+    public void testDeleteById(){
+        this.recipeService.deleteById(1l);
+        verify(this.recipeRepository,times(1)).deleteById(anyLong());
+    }
 }

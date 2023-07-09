@@ -50,4 +50,9 @@ public class RecipeServiceImpl implements RecipeService{
         Recipe recipe=this.recipeRepository.save(this.recipeCommandToRecipe.convert(recipeCommand));
         return this.recipeToRecipeCommand.convert(recipe);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        this.recipeRepository.deleteById(id);
+    }
 }

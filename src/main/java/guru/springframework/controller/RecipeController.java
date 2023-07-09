@@ -6,10 +6,7 @@ import guru.springframework.service.RecipeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -35,6 +32,7 @@ public class RecipeController {
         return "recipe/recipeform";
     }
 
+    @GetMapping
     @RequestMapping("/{id}/update")
     public String updateRecipe(@PathVariable Long id,Model model){
         RecipeCommand recipeCommand=this.recipeService.findCommandById(id);
@@ -48,5 +46,12 @@ public class RecipeController {
     public String saveOrUpdate(@ModelAttribute  RecipeCommand recipeCommand){
         RecipeCommand savedRecipeCommand=this.recipeService.saveCommand(recipeCommand);
         return "redirect:/recipe/view/"+savedRecipeCommand.getId();
+    }
+
+    @GetMapping
+    @RequestMapping("/{id}/delete")
+    public String deleteRecipe(@PathVariable("id") Long id){
+        this.recipeService.deleteById(id);
+        return "redirect:/";
     }
 }

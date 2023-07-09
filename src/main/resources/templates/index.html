@@ -42,13 +42,16 @@
                             <tr th:remove="all">
                                 <td th:text="${recipe.id}">123</td>
                                 <td th:text="${recipe.description}">Tasty Goodnees 1</td>
-                                <td> <a th:href="@{/recipes/view/${recipe.id}}"
-                               >View</a></td>
+                                <td> <a th:href="@{'/recipe/view/'+${recipe.id}}" >View</a></td>
+                                <td> <a th:href="@{'/recipe/'+${recipe.id}+'/update'}">Update</a></td>
+                                <td> <a th:href="@{'/recipe/'+${recipe.id}+'/delete'}">Delete</a></td>
                             </tr>
                             <tr th:each="recipe : ${recipes}">
                                 <td th:text="${recipe.id}">123</td>
                                 <td th:text="${recipe.description}">Tasty Goodnees</td>
-                                <td> <a th:href="@{/recipes/view/{id}(id = ${recipe.id})}" >View</a></td>
+                                <td> <a th:href="@{'/recipe/view/'+${recipe.id}}" >View</a></td>
+                                <td> <a th:href="@{'/recipe/'+${recipe.id}+'/update'}">Update</a></td>
+                                <td> <a th:href="@{'/recipe/'+${recipe.id}+'/delete'}">Delete</a></td>
                             </tr>
                         </table>
                     </div>
