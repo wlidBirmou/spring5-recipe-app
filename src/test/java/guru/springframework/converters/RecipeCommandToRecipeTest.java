@@ -75,9 +75,9 @@ public class RecipeCommandToRecipeTest extends TestCase {
                 .directions(this.DIRECTIONS)
                 .image(this.IMAGE)
                 .difficulty(this.DIFFICULTY)
-                .notesCommand(this.NOTES_COMMAND)
-                .ingredientCommands(this.INGREDIENTS_COMMAND)
-                .categoryCommands(this.CATEGORIES_COMMAND)
+                .notes(this.NOTES_COMMAND)
+                .ingredients(this.INGREDIENTS_COMMAND)
+                .categories(this.CATEGORIES_COMMAND)
                 .build();
 
 

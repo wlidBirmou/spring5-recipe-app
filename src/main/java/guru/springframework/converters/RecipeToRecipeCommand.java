@@ -36,14 +36,14 @@ public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand> {
                 .directions(recipe.getDirections())
                 .image(recipe.getImage())
                 .difficulty(recipe.getDifficulty())
-                .ingredientCommands(new LinkedHashSet<>())
-                .categoryCommands(new LinkedHashSet<>())
+                .ingredients(new LinkedHashSet<>())
+                .categories(new LinkedHashSet<>())
                 .build();
-        if(recipe.getIngredients()!=null)recipe.getIngredients().forEach(i->recipeCommand.getIngredientCommands()
+        if(recipe.getIngredients()!=null)recipe.getIngredients().forEach(i->recipeCommand.getIngredients()
                 .add(this.ingredientToIngredientCommand.convert(i)));
-        if(recipe.getCategories()!=null)recipe.getCategories().forEach(c->recipeCommand.getCategoryCommands()
+        if(recipe.getCategories()!=null)recipe.getCategories().forEach(c->recipeCommand.getCategories()
                 .add(this.categoryToCategoryCommand.convert(c)));
-        recipeCommand.setNotesCommand(this.notesToNotesCommand.convert(recipe.getNotes()));
+        recipeCommand.setNotes(this.notesToNotesCommand.convert(recipe.getNotes()));
         return recipeCommand;
     }
 }

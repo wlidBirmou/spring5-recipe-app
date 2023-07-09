@@ -20,13 +20,13 @@ public class IngredientCommandToIngredient implements Converter<IngredientComman
     @Override
     public Ingredient convert(IngredientCommand ingredientCommand) {
         if(ingredientCommand==null) return null;
-        System.out.println(ingredientCommand.getUnitOfMeasureCommand());
+        System.out.println(ingredientCommand.getUnitOfMeasure());
         Ingredient ingredient= Ingredient.builder()
                 .id(ingredientCommand.getId())
                 .description(ingredientCommand.getDescription())
                 .amount(ingredientCommand.getAmount())
                 .build();
-        ingredient.setUnitOfMeasure(this.unitOfMeasureCommandToUnitOfMeasure.convert(ingredientCommand.getUnitOfMeasureCommand()));
+        ingredient.setUnitOfMeasure(this.unitOfMeasureCommandToUnitOfMeasure.convert(ingredientCommand.getUnitOfMeasure()));
         return ingredient;
     }
 }

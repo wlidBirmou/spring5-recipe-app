@@ -25,7 +25,7 @@ public class IngredientToIngredientCommand implements Converter<Ingredient, Ingr
                 .description(ingredient.getDescription())
                 .amount(ingredient.getAmount())
                 .build();
-        ingredientCommand.setUnitOfMeasureCommand(this.unitOfMeasureCommand.convert(ingredient.getUnitOfMeasure()));
+        ingredientCommand.setUnitOfMeasure(this.unitOfMeasureCommand.convert(ingredient.getUnitOfMeasure()));
         return ingredientCommand;
     }
 }

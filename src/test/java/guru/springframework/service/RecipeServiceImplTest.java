@@ -71,6 +71,18 @@ public class RecipeServiceImplTest {
         verify(recipeRepository,times(1)).findById(any());
     }
 
+
+    @Test
+    public void testFindCommandById() {
+        Recipe recipe=Recipe.builder().id(1l).description("recipe1").build();
+        when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
+        RecipeCommand recipeCommandResult=this.recipeService.findCommandById(1l);
+        assertNotNull(recipeCommandResult);
+        assertEquals(recipe.getId(),recipeCommandResult.getId());
+        assertEquals(recipe.getDescription(),recipeCommandResult.getDescription());
+        verify(recipeRepository,times(1)).findById(any());
+    }
+
     @Test
     public void testSave(){
         Recipe recipe=Recipe.builder()
@@ -98,7 +110,7 @@ public class RecipeServiceImplTest {
                 .difficulty(this.DIFFICULTY)
                 .build();
         when(recipeRepository.save(any())).thenReturn(recipe);
-        RecipeCommand savedRecipeCommand=this.recipeService.save(recipeCommand);
+        RecipeCommand savedRecipeCommand=this.recipeService.saveCommand(recipeCommand);
         assertEquals(recipeCommand.getId(),savedRecipeCommand.getId());
         assertEquals(recipeCommand.getDescription(),savedRecipeCommand.getDescription());
         assertEquals(recipeCommand.getUrl(),savedRecipeCommand.getUrl());
@@ -111,11 +123,13 @@ public class RecipeServiceImplTest {
         verify(this.recipeRepository,times(1)).save(any());
     }
 
+
+
     @Test
     public void testSaveNull(){
         RecipeCommand recipeCommand=null;
         when(recipeRepository.save(null)).thenReturn(null);
-        assertNull(this.recipeService.save(recipeCommand));
+        assertNull(this.recipeService.saveCommand(recipeCommand));
         verify(this.recipeRepository,times(0)).save(any());
 
     }

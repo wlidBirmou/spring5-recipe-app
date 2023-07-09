@@ -36,7 +36,7 @@ public class RecipeServiceIT {
         Recipe testRecipe=recipes.iterator().next();
         RecipeCommand testRecipeCommand=this.recipeToRecipeCommand.convert(testRecipe);
         testRecipeCommand.setDescription(NEW_DESCRIPTION);
-        RecipeCommand savedRecipeCommand=this.recipeService.save(testRecipeCommand);
+        RecipeCommand savedRecipeCommand=this.recipeService.saveCommand(testRecipeCommand);
 
         assertEquals(NEW_DESCRIPTION,savedRecipeCommand.getDescription());
         assertEquals(testRecipe.getId(),savedRecipeCommand.getId());

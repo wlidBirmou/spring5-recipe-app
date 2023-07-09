@@ -88,7 +88,7 @@ public class RecipeToRecipeCommandTest extends TestCase {
         assertEquals(this.DIRECTIONS, recipeCommand.getDirections());
         assertEquals(this.IMAGE, recipeCommand.getImage());
         assertEquals(this.DIFFICULTY, recipeCommand.getDifficulty());
-        assertEquals(this.INGREDIENTS.size(), recipeCommand.getIngredientCommands().size());
-        assertEquals(this.CATEGORIES.size(), recipeCommand.getCategoryCommands().size());
+        assertEquals(this.INGREDIENTS.size(), recipeCommand.getIngredients().size());
+        assertEquals(this.CATEGORIES.size(), recipeCommand.getCategories().size());
     }
 }

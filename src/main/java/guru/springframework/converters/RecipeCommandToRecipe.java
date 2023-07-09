@@ -39,11 +39,11 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
                 .ingredients(new LinkedHashSet<>())
                 .categories(new LinkedHashSet<>())
                 .build();
-        if(recipeCommand.getIngredientCommands()!=null)recipeCommand.getIngredientCommands().forEach(i->recipe.getIngredients()
+        if(recipeCommand.getIngredients()!=null)recipeCommand.getIngredients().forEach(i->recipe.getIngredients()
                 .add(this.ingredientCommandToIngredient.convert(i)));
-        if(recipeCommand.getCategoryCommands()!=null)recipeCommand.getCategoryCommands().forEach(c->recipe.getCategories()
+        if(recipeCommand.getCategories()!=null)recipeCommand.getCategories().forEach(c->recipe.getCategories()
                 .add(this.categoryCommandToCategory.convert(c)));
-        recipe.setNotes(this.notesCommandToNotes.convert(recipeCommand.getNotesCommand()));
+        recipe.setNotes(this.notesCommandToNotes.convert(recipeCommand.getNotes()));
         return recipe;
     }
 }
