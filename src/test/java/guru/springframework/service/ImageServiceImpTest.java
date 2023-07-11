@@ -1,5 +1,6 @@
 package guru.springframework.service;
 
+import guru.springframework.commands.RecipeCommand;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import junit.framework.TestCase;
@@ -45,4 +46,6 @@ public class ImageServiceImpTest extends TestCase {
         Recipe savedRecipe=argumentCaptor.getValue();
         assertEquals(multipartFile.getBytes().length,savedRecipe.getImage().length);
     }
+
+
 }

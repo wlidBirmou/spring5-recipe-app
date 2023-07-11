@@ -18,8 +18,7 @@ public class ImageServiceImp implements ImageService{
     public void saveImageFile(Long recipeId, MultipartFile multipartFile) {
         try {
         Recipe recipe= this.recipeRepository.findById(recipeId).orElseThrow(()-> new RuntimeException("No recipe with the given ID exists"));
-        Byte[] byteObjects= new Byte[0];
-            byteObjects = new Byte[multipartFile.getBytes().length];
+        Byte[] byteObjects= new Byte[multipartFile.getBytes().length];
         int i=0;
         for(byte b: multipartFile.getBytes()) byteObjects[i++]=b;
         recipe.setImage(byteObjects);

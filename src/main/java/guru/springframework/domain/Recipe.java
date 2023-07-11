@@ -25,6 +25,7 @@ public class Recipe {
     private String url;
     @Column(columnDefinition = "VARCHAR(4000)")
     private String directions;
+    @Lob
     private Byte[] image;
 
 

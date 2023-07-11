@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -58,6 +59,27 @@ public class ImageControllerTest extends TestCase {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("location","/recipe/view/1"));
         verify(this.imageService,times(1)).saveImageFile(anyLong(),any());
+    }
+
+    @Test
+    public void renderImageFromDB() throws Exception{
+        RecipeCommand recipeCommand=RecipeCommand.builder().id(1l).description("desc recipe").build();
+        String s="this is a fake image";
+
+        Byte[] boxedBytes=new Byte[s.getBytes().length];
+        int i=0;
+        for(byte b: s.getBytes()) boxedBytes[i++]=b;
+
+        when(this.recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+
+        MockMvc mockMvc=MockMvcBuilders.standaloneSetup(this.imageController).build();
+       MockHttpServletResponse response=mockMvc.perform(get("/recupe/1/recipeimage"))
+               .andExpect(status().isOk())
+               .andReturn().getResponse();
+
+       byte[] responseByte=response.getContentAsByteArray();
+
+       assertEquals(s.getBytes().length,responseByte.length);
     }
 
 }
