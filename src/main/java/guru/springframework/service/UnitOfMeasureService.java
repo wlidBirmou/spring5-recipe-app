@@ -1,6 +1,11 @@
 package guru.springframework.service;
 
-import guru.springframework.repositories.UnitOfMeasureRepository;
+import guru.springframework.commands.UnitOfMeasureCommand;
+import guru.springframework.domain.UnitOfMeasure;
 
-public interface UnitOfMeasureService extends UnitOfMeasureRepository {
+import java.util.Set;
+
+public interface UnitOfMeasureService {
+    Set<UnitOfMeasureCommand> listAllUnitOfMeasures();
+    UnitOfMeasure getUnit();
 }

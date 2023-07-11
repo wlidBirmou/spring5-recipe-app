@@ -34,11 +34,9 @@ public class RecipeToRecipeCommandTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        this.ingredientToIngredientCommand=new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
+        this.ingredientToIngredientCommand=new IngredientToIngredientCommand();
         this.categoryToCategoryCommand=new CategoryToCategoryCommand();
-        this.recipeToRecipeCommand=new RecipeToRecipeCommand(
-                this.ingredientToIngredientCommand,
-                this.categoryToCategoryCommand,new NotesToNotesCommand());
+        this.recipeToRecipeCommand=new RecipeToRecipeCommand();
 
     }
 

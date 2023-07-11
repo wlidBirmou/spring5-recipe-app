@@ -1,5 +1,6 @@
 package guru.springframework.commands;
 
+import guru.springframework.domain.Recipe;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
@@ -9,10 +10,9 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Builder
 @Component
-
 public class NotesCommand {
 
     private Long id;
     private String recipeNotes;
-    private RecipeCommand recipe;
+    private Recipe recipe;
 }

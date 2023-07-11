@@ -16,7 +16,10 @@ public class NotesToNotesCommand implements Converter<Notes, NotesCommand> {
     @Override
     public NotesCommand convert(Notes notes) {
         if(notes==null)return null;
-        NotesCommand notesCommand= NotesCommand.builder().id(notes.getId()).recipeNotes(notes.getRecipeNotes())
+        NotesCommand notesCommand= NotesCommand.builder()
+                .id(notes.getId())
+                .recipeNotes(notes.getRecipeNotes())
+                .recipe(notes.getRecipe())
                 .build();
         return notesCommand;
     }

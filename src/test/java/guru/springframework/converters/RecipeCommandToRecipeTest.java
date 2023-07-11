@@ -1,11 +1,7 @@
 package guru.springframework.converters;
 
-import guru.springframework.commands.CategoryCommand;
-import guru.springframework.commands.IngredientCommand;
-import guru.springframework.commands.NotesCommand;
 import guru.springframework.commands.RecipeCommand;
-import guru.springframework.domain.Difficulty;
-import guru.springframework.domain.Recipe;
+import guru.springframework.domain.*;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,10 +12,6 @@ import java.util.Set;
 public class RecipeCommandToRecipeTest extends TestCase {
 
     private RecipeCommandToRecipe recipeCommandToRecipe;
-    private IngredientCommandToIngredient ingredientCommandToIngredient;
-    private CategoryCommandToCategory categoryCommandToCategory;
-    private NotesCommandToNotes notesCommandToNotes;
-
 
     private final Long ID=3l;
     private final String DESCRIPTION="desc";
@@ -31,23 +23,20 @@ public class RecipeCommandToRecipeTest extends TestCase {
     private final String DIRECTIONS="directions";
     private final Byte[] IMAGE={1,1,0,1,1};
     private final Difficulty DIFFICULTY=Difficulty.MODERATE;
-    private NotesCommand NOTES_COMMAND =NotesCommand.builder().id(1l).recipeNotes("recipeNotes1").build();
-    private Set<IngredientCommand> INGREDIENTS_COMMAND=new LinkedHashSet<>();
-    private Set<CategoryCommand> CATEGORIES_COMMAND=new LinkedHashSet<>();
+    private Notes NOTES = Notes.builder().id(1l).recipeNotes("recipeNotes1").build();
+    private Set<Ingredient> INGREDIENTS =new LinkedHashSet<>();
+    private Set<Category> CATEGORIES =new LinkedHashSet<>();
 
 
     @Before
     public void setUp() throws Exception {
-        this.notesCommandToNotes=new NotesCommandToNotes();
-        this.ingredientCommandToIngredient=new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
-        this.categoryCommandToCategory=new CategoryCommandToCategory();
-        this.recipeCommandToRecipe=new RecipeCommandToRecipe(this.ingredientCommandToIngredient,this.categoryCommandToCategory,this.notesCommandToNotes);
+        this.recipeCommandToRecipe=new RecipeCommandToRecipe();
 
-        this.INGREDIENTS_COMMAND.add(IngredientCommand.builder().id(1l).description("desc1").build());
-        this.INGREDIENTS_COMMAND.add(IngredientCommand.builder().id(2l).description("desc2").build());
+        this.INGREDIENTS.add(Ingredient.builder().id(1l).description("desc1").build());
+        this.INGREDIENTS.add(Ingredient.builder().id(2l).description("desc2").build());
 
-        this.CATEGORIES_COMMAND.add(CategoryCommand.builder().id(1l).description("desc1").build());
-        this.CATEGORIES_COMMAND.add(CategoryCommand.builder().id(2l).description("desc2").build());
+        this.CATEGORIES.add(Category.builder().id(1l).description("desc1").build());
+        this.CATEGORIES.add(Category.builder().id(2l).description("desc2").build());
     }
 
     @Test
@@ -75,9 +64,9 @@ public class RecipeCommandToRecipeTest extends TestCase {
                 .directions(this.DIRECTIONS)
                 .image(this.IMAGE)
                 .difficulty(this.DIFFICULTY)
-                .notes(this.NOTES_COMMAND)
-                .ingredients(this.INGREDIENTS_COMMAND)
-                .categories(this.CATEGORIES_COMMAND)
+                .notes(this.NOTES)
+                .ingredients(this.INGREDIENTS)
+                .categories(this.CATEGORIES)
                 .build();
 
 
@@ -93,9 +82,9 @@ public class RecipeCommandToRecipeTest extends TestCase {
         assertEquals(this.DIRECTIONS, recipe.getDirections());
         assertEquals(this.IMAGE, recipe.getImage());
         assertEquals(this.DIFFICULTY, recipe.getDifficulty());
-        assertEquals(this.INGREDIENTS_COMMAND.size(), recipe.getIngredients().size());
-        assertEquals(this.CATEGORIES_COMMAND.size(), recipe.getCategories().size());
-        assertEquals(this.NOTES_COMMAND.getId(), recipe.getNotes().getId());
-        assertEquals(this.NOTES_COMMAND.getRecipeNotes(), recipe.getNotes().getRecipeNotes());
+        assertEquals(this.INGREDIENTS.size(), recipe.getIngredients().size());
+        assertEquals(this.CATEGORIES.size(), recipe.getCategories().size());
+        assertEquals(this.NOTES.getId(), recipe.getNotes().getId());
+        assertEquals(this.NOTES.getRecipeNotes(), recipe.getNotes().getRecipeNotes());
     }
 }

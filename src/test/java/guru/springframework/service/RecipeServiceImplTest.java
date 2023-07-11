@@ -14,7 +14,7 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static junit.framework.Assert.*;
+import static junit.framework.TestCase.*;
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -40,11 +40,8 @@ public class RecipeServiceImplTest {
     @Before
     public void setUp()  {
         MockitoAnnotations.initMocks(this);
-        RecipeToRecipeCommand recipeToRecipeCommand=new RecipeToRecipeCommand(new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()),
-                new CategoryToCategoryCommand(),new NotesToNotesCommand());
-        RecipeCommandToRecipe recipeCommandToRecipe=new RecipeCommandToRecipe(
-                new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure())
-                ,new CategoryCommandToCategory(),new NotesCommandToNotes());
+        RecipeToRecipeCommand recipeToRecipeCommand=new RecipeToRecipeCommand();
+        RecipeCommandToRecipe recipeCommandToRecipe=new RecipeCommandToRecipe();
         recipeService=new RecipeServiceImpl(this.recipeRepository,recipeCommandToRecipe,recipeToRecipeCommand);
     }
 

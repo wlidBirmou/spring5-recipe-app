@@ -2,6 +2,8 @@ package guru.springframework.converters;
 
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.domain.Ingredient;
+import guru.springframework.domain.Recipe;
+import guru.springframework.domain.UnitOfMeasure;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +22,7 @@ public class IngredientToIngredientCommandTest extends TestCase {
     @Before
     public void setUp() throws Exception {
         this.unitOfMeasureCommand=new UnitOfMeasureToUnitOfMeasureCommand();
-        this.ingredientToIngredientCommand=new IngredientToIngredientCommand(this.unitOfMeasureCommand);
+        this.ingredientToIngredientCommand=new IngredientToIngredientCommand();
 
     }
 
@@ -39,14 +41,22 @@ public class IngredientToIngredientCommandTest extends TestCase {
 
     @Test
     public void testConvert() {
-        Ingredient ingredient= new Ingredient();
-        ingredient.setId(this.ID);
-        ingredient.setDescription(this.DESCRIPTION);
-        ingredient.setAmount(this.AMOUNT);
+        Ingredient ingredient=Ingredient.builder()
+                .id(this.ID)
+                .description(this.DESCRIPTION)
+                .amount(this.AMOUNT)
+                .recipe(Recipe.builder().id(1l).description("recipe desp").build())
+                .unitOfMeasure(UnitOfMeasure.builder().id(1l).description("unit").build())
+                .build();
+
         IngredientCommand ingredientCommand=this.ingredientToIngredientCommand.convert(ingredient);
         assertNotNull(ingredientCommand);
         assertEquals(this.ID, ingredientCommand.getId());
         assertEquals(this.DESCRIPTION, ingredientCommand.getDescription());
         assertEquals(this.AMOUNT, ingredientCommand.getAmount());
+        assertEquals(ingredient.getRecipe().getId(),ingredientCommand.getRecipe().getId());
+        assertEquals(ingredient.getRecipe().getDescription(),ingredientCommand.getRecipe().getDescription());
+        assertEquals(ingredient.getUnitOfMeasure().getId(),ingredientCommand.getUnitOfMeasure().getId());
+        assertEquals(ingredient.getUnitOfMeasure().getDescription(),ingredientCommand.getUnitOfMeasure().getDescription());
     }
 }

@@ -34,6 +34,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         guacamole.setDescription("Perfect guacamole");
         guacamole.setPrepTime(10);
         guacamole.setCookTime(0);
+        guacamole.setNotes(Notes.builder().recipeNotes("recipeNotes").build());
         guacamole.setDifficulty(Difficulty.EASY);
         guacamole.setDirections("One cut avocado, remove flesh: cut the avocados in half. remove seed score the inside of the avocado");
         guacamole.getIngredients().add(new Ingredient("Ripe avocados", BigDecimal.valueOf(2),unitOfMeasureRepository.findByDescription("Unit").get(),guacamole));

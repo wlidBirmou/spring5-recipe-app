@@ -15,9 +15,7 @@ import java.util.LinkedHashSet;
 public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
 
 
-    private final IngredientCommandToIngredient ingredientCommandToIngredient;
-    private final CategoryCommandToCategory categoryCommandToCategory;
-    private final NotesCommandToNotes notesCommandToNotes;
+
 
 
     @Synchronized
@@ -39,11 +37,9 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
                 .ingredients(new LinkedHashSet<>())
                 .categories(new LinkedHashSet<>())
                 .build();
-        if(recipeCommand.getIngredients()!=null)recipeCommand.getIngredients().forEach(i->recipe.getIngredients()
-                .add(this.ingredientCommandToIngredient.convert(i)));
-        if(recipeCommand.getCategories()!=null)recipeCommand.getCategories().forEach(c->recipe.getCategories()
-                .add(this.categoryCommandToCategory.convert(c)));
-        recipe.setNotes(this.notesCommandToNotes.convert(recipeCommand.getNotes()));
+        if(recipeCommand.getIngredients()!=null)recipe.setIngredients(recipeCommand.getIngredients());
+        if(recipeCommand.getCategories()!=null)recipe.setCategories(recipeCommand.getCategories());
+        recipe.setNotes(recipeCommand.getNotes());
         return recipe;
     }
 }

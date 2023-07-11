@@ -1,6 +1,9 @@
 package guru.springframework.commands;
 
+import guru.springframework.domain.Category;
 import guru.springframework.domain.Difficulty;
+import guru.springframework.domain.Ingredient;
+import guru.springframework.domain.Notes;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +28,7 @@ public class RecipeCommand {
     private String directions;
     private Byte[] image;
     private Difficulty difficulty;
-    private NotesCommand notes;
-    private Set<IngredientCommand> ingredients;
-    private Set<CategoryCommand> categories =new LinkedHashSet<>();
+    private Notes notes;
+    private Set<Ingredient> ingredients;
+    private Set<Category> categories =new LinkedHashSet<>();
 }
