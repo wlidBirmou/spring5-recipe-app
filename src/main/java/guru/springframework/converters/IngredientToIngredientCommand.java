@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class IngredientToIngredientCommand implements Converter<Ingredient, IngredientCommand> {
+public class  IngredientToIngredientCommand implements Converter<Ingredient, IngredientCommand> {
 
 
 

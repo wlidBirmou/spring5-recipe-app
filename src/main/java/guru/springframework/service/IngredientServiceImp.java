@@ -59,16 +59,31 @@ public class IngredientServiceImp implements IngredientService {
                         .orElseThrow(() ->new RuntimeException("Unit of measure not found")));
                 ingredient.setAmount(ingredientCommand.getAmount());
             } else {
+                Ingredient ingredient=this.ingredientCommandToIngredient.convert(ingredientCommand);
+                ingredient.setUnitOfMeasure(this.unitOfMeasureRepository.findById(ingredientCommand.getUnitOfMeasure().getId())
+                        .orElseThrow(() ->new RuntimeException("Unit of measure not found")));
                 recipe.addIngredients(this.ingredientCommandToIngredient.convert(ingredientCommand));
             }
-            this.recipeRepository.save(recipe);
-
+            Recipe savedRecipe=this.recipeRepository.save(recipe);
+            ingredientCommand.setId(savedRecipe.getIngredients().stream().filter(i ->
+                    i.getDescription().equals(ingredientCommand.getDescription()) &&
+                    i.getAmount().equals(ingredientCommand.getAmount()) &&
+                    i.getUnitOfMeasure().getId().equals(ingredientCommand.getUnitOfMeasure().getId())).findFirst().get().getId());
         } else {
             throw new RuntimeException("The provided recipe doesn't exist.");
         }
 
 
         return ingredientCommand;
+    }
+
+    @Override
+    public void deleteById(Long recipeId,Long ingredientId) {
+        Recipe recipe=this.recipeRepository.findById(recipeId).orElseThrow(() -> new RuntimeException("No recipe with the provided id "+recipeId+" exist"));
+        Ingredient ingredient=recipe.getIngredients().stream().filter(i-> i.getId().equals(ingredientId)).findFirst().orElseThrow(()-> new RuntimeException("No ingredient exist in the provided recipe"));
+        recipe.getIngredients().remove(ingredient);
+        ingredient.setRecipe(null);
+        this.recipeRepository.save(recipe);
     }
 
 }

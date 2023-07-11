@@ -113,6 +113,20 @@ public class IngredientServiceImpTest extends TestCase {
         verify(this.ingredientRepository,times(0 )).save(any());
     }
 
+    @Test
+    public void testDeleteById(){
+        UnitOfMeasure unitOfMeasure=UnitOfMeasure.builder().id(1l).description("unit").build();
+        Recipe recipe=Recipe.builder().id(1l).description("recipeDesc").ingredients(new LinkedHashSet<>()).build();
+        Ingredient existingIngredient=Ingredient.builder().id(1l).description("ingredientDesc").amount(BigDecimal.valueOf(10))
+                .unitOfMeasure(unitOfMeasure).recipe(recipe).build();
+        recipe.getIngredients().add(existingIngredient);
+
+        when(this.recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+
+        this.ingredientService.deleteById(1l,1l);
+        verify(this.recipeRepository,times(1)).save(any());
+    }
+
 
 
 }

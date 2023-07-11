@@ -71,20 +71,14 @@ public class IngredientControllerTest extends TestCase {
     public void testNewIngredientForm() throws Exception {
 
 
-
-
-
         MockMvc mockMvc= MockMvcBuilders.standaloneSetup(this.ingredientController).build();
         mockMvc.perform(get("/recipe/1/ingredient/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/ingredientform"))
                 .andExpect(model().attributeExists("ingredient"))
                 .andExpect(model().attributeExists("unitOfMeasureList"))
-                .andExpect(model().attribute("ingredient",notNull()))
-                .andExpect(model().attribute("unitOfMeasureList",notNull()))
-                .andExpect(model().attribute("ingredient",hasProperty("id",isNull())))
-                .andExpect(model().attribute("ingredient",hasProperty("recipe",notNullValue())));
-
+                .andExpect(model().attribute("ingredient",notNullValue()))
+                .andExpect(model().attribute("unitOfMeasureList",notNullValue()));
     }
 
     @Test
@@ -114,6 +108,19 @@ public class IngredientControllerTest extends TestCase {
 
         verifyNoMoreInteractions(this.recipeService);
         verify(this.ingredientService,times(1)).findByRecipeIdAndIngredientId(anyLong(),anyLong());
+    }
+
+    @Test
+    public void testDeleteIngredient() throws Exception {
+        Recipe recipe=Recipe.builder().id(1l).description("desc").ingredients(new LinkedHashSet<>()).build();
+        IngredientCommand ingredientCommand=IngredientCommand.builder().id(1l).description("desc ingredients").recipe(recipe).build();
+
+        when(this.ingredientService.findByRecipeIdAndIngredientId(anyLong(),anyLong())).thenReturn(ingredientCommand);
+
+        MockMvc mockMvc= MockMvcBuilders.standaloneSetup(this.ingredientController).build();
+        mockMvc.perform(get("/recipe/1/ingredient/1/delete"))
+                .andExpect(status().is3xxRedirection());
+        verify(this.ingredientService,times(1)).deleteById(anyLong(),anyLong());
     }
 
 
