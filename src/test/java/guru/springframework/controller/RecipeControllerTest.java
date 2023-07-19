@@ -7,12 +7,9 @@ import guru.springframework.service.RecipeService;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -21,8 +18,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class RecipeControllerTest extends TestCase {
 
 
@@ -46,7 +41,9 @@ public class RecipeControllerTest extends TestCase {
     @Test(expected = NotFoundException.class)
     public void testViewRecipeNotFound() throws Exception {
         when(this.recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
-        mockMvc.perform(get("/recipes/view/1")).andExpect(status().isNotFound());
+        mockMvc.perform(get("/recipes/view/1"))
+                .andExpect(view().name("404error"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
