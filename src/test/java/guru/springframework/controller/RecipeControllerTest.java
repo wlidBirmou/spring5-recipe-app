@@ -1,5 +1,6 @@
 package guru.springframework.controller;
 
+import exceptions.NotFoundException;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.domain.Recipe;
 import guru.springframework.service.RecipeService;
@@ -15,8 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -27,24 +29,28 @@ public class RecipeControllerTest extends TestCase {
     @Mock
     private RecipeService recipeService;
     private RecipeController recipeController;
-
+    private MockMvc mockMvc;
     @Before
     public void setUp(){
        MockitoAnnotations.initMocks(this);
        this.recipeController=new RecipeController(recipeService);
+       this.mockMvc= MockMvcBuilders.standaloneSetup(this.recipeController).build();
     }
     @Test
     public void testViewRecipe() throws Exception {
         Recipe recipe= Recipe.builder().id(1l).build();
-        when(this.recipeService.findById(any())).thenReturn(recipe);
-        MockMvc mockMvc= MockMvcBuilders.standaloneSetup(this.recipeController).build();
+        when(this.recipeService.findById(anyLong())).thenReturn(recipe);
         mockMvc.perform(get("/recipes/view/1")).andExpect(status().isOk())
                 .andExpect(view().name("recipe/view.html")).andExpect(model().attributeExists("recipe"));
+    }
+    @Test(expected = NotFoundException.class)
+    public void testViewRecipeNotFound() throws Exception {
+        when(this.recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+        mockMvc.perform(get("/recipes/view/1")).andExpect(status().isNotFound());
     }
 
     @Test
     public void testNewRecipe() throws Exception {
-        MockMvc mockMvc=MockMvcBuilders.standaloneSetup(this.recipeController).build();
         mockMvc.perform(get("/recipe/new")).andExpect(status().isOk())
                 .andExpect(view().name("recipe/recipeform"))
                 .andExpect(model().attributeExists("recipe"));
@@ -53,7 +59,6 @@ public class RecipeControllerTest extends TestCase {
     public void testUpdateRecipe() throws Exception {
         RecipeCommand recipeCommand= RecipeCommand.builder().id(1l).build();
         when(this.recipeService.findCommandById(any())).thenReturn(recipeCommand);
-        MockMvc mockMvc=MockMvcBuilders.standaloneSetup(this.recipeController).build();
         mockMvc.perform(get("/recipe/1/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/recipeform"))
@@ -64,7 +69,6 @@ public class RecipeControllerTest extends TestCase {
         RecipeCommand recipeCommand= RecipeCommand.builder().id(1l).build();
         when(this.recipeService.saveCommand(any())).thenReturn(recipeCommand);
 
-        MockMvc mockMvc=MockMvcBuilders.standaloneSetup(this.recipeController).build();
         mockMvc.perform(post("/recipe/recipe_post").contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("id","")
                         .param("description","some string"))
@@ -74,17 +78,14 @@ public class RecipeControllerTest extends TestCase {
 
     @Test
     public void testDeleteRecipe() throws Exception {
-        RecipeCommand recipeCommand= RecipeCommand.builder().id(1l).build();
 
-
-        MockMvc mockMvc=MockMvcBuilders.standaloneSetup(this.recipeController).build();
         mockMvc.perform(get("/recipe/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/{id}/ingredient/list"));
         verify(this.recipeService,times(1)).deleteById(anyLong());
-
-
     }
+
+
 
 
 }

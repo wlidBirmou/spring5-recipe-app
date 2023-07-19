@@ -1,7 +1,6 @@
 package guru.springframework.controller;
 
 import guru.springframework.commands.RecipeCommand;
-import guru.springframework.domain.Recipe;
 import guru.springframework.service.RecipeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,9 +19,8 @@ public class RecipeController {
     @RequestMapping("/view/{id}")
     public ModelAndView viewRecipe(@PathVariable("id") Long id){
         ModelAndView modelAndView=new ModelAndView();
-        Recipe recipe=this.recipeService.findById(id);
+        modelAndView.addObject("recipe", this.recipeService.findById(id));
         modelAndView.setViewName("recipe/view.html");
-        modelAndView.addObject("recipe", recipe);
         return modelAndView;
     }
 

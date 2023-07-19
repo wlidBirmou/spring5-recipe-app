@@ -1,10 +1,10 @@
 package guru.springframework.service;
 
+import exceptions.NotFoundException;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.domain.Recipe;
-import guru.springframework.domain.UnitOfMeasure;
 import guru.springframework.repositories.RecipeRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public Recipe findById(Long id) {
         Optional<Recipe> recipeOptional= this.recipeRepository.findById(id);
-        if(!recipeOptional.isPresent()) throw new RuntimeException("Recipe with the id:"+id+" not found");
+        if(!recipeOptional.isPresent()) throw new NotFoundException("Recipe with the id:"+id+" not found");
         return recipeOptional.get();
     }
 

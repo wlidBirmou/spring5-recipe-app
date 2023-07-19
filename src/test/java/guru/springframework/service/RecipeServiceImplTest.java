@@ -1,5 +1,6 @@
 package guru.springframework.service;
 
+import exceptions.NotFoundException;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.*;
 import guru.springframework.domain.Difficulty;
@@ -68,6 +69,11 @@ public class RecipeServiceImplTest {
         verify(recipeRepository,times(1)).findById(any());
     }
 
+    @Test(expected = NotFoundException.class)
+    public void testFindRecipeByIdNotFound(){
+        when(this.recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
+         this.recipeService.findById(1l);
+    }
 
     @Test
     public void testFindCommandById() {
@@ -136,4 +142,6 @@ public class RecipeServiceImplTest {
         this.recipeService.deleteById(1l);
         verify(this.recipeRepository,times(1)).deleteById(anyLong());
     }
+
+
 }
