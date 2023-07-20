@@ -1,15 +1,16 @@
 package guru.springframework.controller;
 
-import exceptions.NotFoundException;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.service.RecipeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping({"/recipes","/recipe"})
@@ -43,7 +44,8 @@ public class RecipeController {
 
 
     @PostMapping("recipe_post")
-    public String saveOrUpdate(@ModelAttribute  RecipeCommand recipeCommand){
+    public String saveOrUpdate(@Valid @ModelAttribute("recipe")  RecipeCommand recipeCommand, BindingResult bindingResult){
+        if(bindingResult.hasErrors())return "recipe/recipeform";
         RecipeCommand savedRecipeCommand=this.recipeService.saveCommand(recipeCommand);
         return "redirect:/recipe/view/"+savedRecipeCommand.getId();
     }
@@ -54,22 +56,5 @@ public class RecipeController {
         return "redirect:/recipe/{id}/ingredient/list";
     }
 
-    @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ModelAndView handleNotFound(Exception exception){
-        ModelAndView modelAndView=new ModelAndView();
-        log.error(exception.getMessage());
-        modelAndView.addObject("exception",exception);
-        modelAndView.setViewName("404error");
-        return modelAndView;
-    }
-    @ExceptionHandler(NumberFormatException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView handleNumberFormatException(Exception exception){
-        ModelAndView modelAndView=new ModelAndView();
-        log.error(exception.getMessage());
-        modelAndView.addObject("exception",exception);
-        modelAndView.setViewName("400error");
-        return modelAndView;
-    }
+
 }

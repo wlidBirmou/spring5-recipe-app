@@ -29,7 +29,7 @@ public class RecipeControllerTest extends TestCase {
     public void setUp(){
        MockitoAnnotations.initMocks(this);
        this.recipeController=new RecipeController(recipeService);
-       this.mockMvc= MockMvcBuilders.standaloneSetup(this.recipeController).build();
+       this.mockMvc= MockMvcBuilders.standaloneSetup(this.recipeController).setControllerAdvice(new ControllerExceptionAdvice()).build();
     }
     @Test
     public void testViewRecipe() throws Exception {
@@ -63,12 +63,14 @@ public class RecipeControllerTest extends TestCase {
     }
     @Test
     public void testSaveOrUpdate() throws Exception {
-        RecipeCommand recipeCommand= RecipeCommand.builder().id(1l).build();
+        RecipeCommand recipeCommand= RecipeCommand.builder().id(1l).directions("do it in").build();
+
         when(this.recipeService.saveCommand(any())).thenReturn(recipeCommand);
 
         mockMvc.perform(post("/recipe/recipe_post").contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("id","")
-                        .param("description","some string"))
+                        .param("description","some string")
+                        .param("directions", "some directions"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/view/1"));
     }
